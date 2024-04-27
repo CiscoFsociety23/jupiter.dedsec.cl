@@ -19,6 +19,8 @@ class JupiterService {
     public async getServiceStatus(): Promise<serviceInformation> {
         console.log(`[info]: Obteniendo estado del servicio`);
         const serverName: property[] = await this.properties.getProperty('Server Name');
+        const authService: serviceStatus[] = await this.serviceStatus.getServiceStatus('Auth Service');
+        this.checkServiceList(authService);
         return { Server: serverName[0].value , Services: this.servicesList };
     };
 
