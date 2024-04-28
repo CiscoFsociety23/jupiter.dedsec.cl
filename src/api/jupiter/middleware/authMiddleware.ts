@@ -14,6 +14,18 @@ class AuthMiddleware {
         };
     };
 
+    public checkHeader(req: Request, res: Response, next: () => void){
+        console.log('[info]: Verificando header');
+        const { authorization } = req.headers;
+        if(authorization?.split(' ')[0] === 'Bearer'){
+            console.log('[info]: Token encontrado');
+            next();
+        } else {
+            console.log('[error]: Debe ingresar un token valido');
+            res.json({ status: false });
+        }
+    };
+
 };
 
 export { AuthMiddleware };

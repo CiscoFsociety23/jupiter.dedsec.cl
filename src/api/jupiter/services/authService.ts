@@ -40,6 +40,19 @@ class AuthService {
         return token;
     };
 
+    public async verifyToken(token: string): Promise<boolean | unknown> {
+        try {
+            console.log('[info]: Verificando validez del token')
+            const [ property ] = await this.property.getProperty('Token Maker');
+            const verify = jwt.verify(token, property.value)
+            console.log('[info]: Token ok', jwt.verify(token, property.value))
+            return true;
+        } catch (error) {
+            console.log(`[error]: ${error}`);
+            return error;
+        }
+    };
+
 };
 
 export { AuthService };
