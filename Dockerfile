@@ -6,6 +6,6 @@ WORKDIR /jupiter.dedsec.cl
 COPY . .
 RUN npm i -g nodemon
 RUN npm i
-EXPOSE 8543
+EXPOSE 8643
 
 CMD ["nodemon", "src/index.ts"]
