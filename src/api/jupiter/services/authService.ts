@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, property } from '@prisma/client';
 import jwt from 'jsonwebtoken';
 import { Properties } from '../../configs/properties';
 
@@ -27,11 +27,11 @@ class AuthService {
 
     public async getToken(client: string): Promise<string> {
         console.log(`[info]: Generando token para cliente: ${client}`);
-        const expiresInMinutes = 5;
+        const [ expTime ] = await this.property.getProperty('Session Time');
         const emissionDate = new Date();
         emissionDate.toLocaleString('en-US', { timeZone: 'America/Santiago' });
         const expirationDate = new Date(emissionDate);
-        expirationDate.setMinutes(expirationDate.getMinutes() + expiresInMinutes);
+        expirationDate.setMinutes(expirationDate.getMinutes() + Number(expTime.value));
         expirationDate.toLocaleString('en-US', { timeZone: 'America/Santiago' });
         const payload = { client, exp: Math.floor(expirationDate.getTime() / 1000) };
         const [ property ] = await this.property.getProperty('Token Maker');
