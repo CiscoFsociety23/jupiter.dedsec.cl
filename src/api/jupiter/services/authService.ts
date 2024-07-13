@@ -25,7 +25,7 @@ class AuthService {
         };
     };
 
-    public async getToken(client: string): Promise<string> {
+    public async getToken(client: string, profile: string): Promise<string> {
         console.log(`[info]: Generando token para cliente: ${client}`);
         const [ expTime ] = await this.property.getProperty('Session Time');
         const emissionDate = new Date();
@@ -33,7 +33,7 @@ class AuthService {
         const expirationDate = new Date(emissionDate);
         expirationDate.setMinutes(expirationDate.getMinutes() + Number(expTime.value));
         expirationDate.toLocaleString('en-US', { timeZone: 'America/Santiago' });
-        const payload = { client, exp: Math.floor(expirationDate.getTime() / 1000) };
+        const payload = { client, profile, exp: Math.floor(expirationDate.getTime() / 1000) };
         const [ property ] = await this.property.getProperty('Token Maker');
         const token = jwt.sign(payload, property.value);
         console.log('[info]: Token generado ok')
