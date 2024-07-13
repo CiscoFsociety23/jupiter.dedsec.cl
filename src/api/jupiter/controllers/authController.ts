@@ -8,9 +8,9 @@ const authMiddleware: AuthMiddleware = new AuthMiddleware();
 
 authController.get('/', authMiddleware.checkParams, async (req: Request, res: Response) => {
     try {
-        const { user, passwd, client } = req.query;
+        const { user, passwd, client, profile } = req.query;
         if(await authService.checkCredentials(String(user), String(passwd))){
-            res.json({ token: await authService.getToken(String(client)) });
+            res.json({ token: await authService.getToken(String(client), String(profile)) });
         } else {
             res.json({ status: false });
         };
