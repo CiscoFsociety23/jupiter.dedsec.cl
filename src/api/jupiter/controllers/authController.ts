@@ -20,6 +20,20 @@ authController.get('/', authMiddleware.checkParams, async (req: Request, res: Re
     };
 });
 
+authController.get('/validationToken', authMiddleware.checkParams, async (req: Request, res: Response) => {
+    try {
+        const { user, passwd, client } = req.query;
+        if(await authService.checkCredentials(String(user), String(passwd))){
+            res.json({ token: await authService.getValidationToken(String(client)) });
+        } else {
+            res.json({ status: false });
+        };
+    } catch (error) {
+        console.log(`[error]: ${error}`);
+        res.json({ status: false });
+    };
+});
+
 authController.post('/verify', authMiddleware.checkHeader, async (req: Request, res: Response) => {
     try {
         const { authorization } = req.headers;
