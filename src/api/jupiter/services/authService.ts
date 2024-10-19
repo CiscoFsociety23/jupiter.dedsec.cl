@@ -8,21 +8,26 @@ class AuthService {
     private property: Properties = new Properties();
 
     public async checkCredentials(userService: string, password: string): Promise<boolean>{
-        console.log('[info]: Verificando usuario');
-        const [ user ] = await this.prisma.users.findMany({ select: { user: true, passwd: true }, where: { user: userService } });
-        if(user){
-            console.log('[info]: Usuario encontrado');
-            if (password === user.passwd){
-                console.log('[info]: Credenciales ok');
-                return true;
+        try {
+            this.prisma.$connect();
+            console.log('[info]: Verificando usuario');
+            const [ user ] = await this.prisma.users.findMany({ select: { user: true, passwd: true }, where: { user: userService } });
+            if(user){
+                console.log('[info]: Usuario encontrado');
+                if (password === user.passwd){
+                    console.log('[info]: Credenciales ok');
+                    return true;
+                } else {
+                    console.log('[error]: Contraseña incorrecta');
+                    return false;
+                };
             } else {
-                console.log('[error]: Contraseña incorrecta');
+                console.log('[error]: Usuario no encontrado');
                 return false;
             };
-        } else {
-            console.log('[error]: Usuario no encontrado');
-            return false;
-        };
+        } finally {
+            this.prisma.$disconnect();
+        }
     };
 
     public async getToken(client: string, profile: string): Promise<string> {
