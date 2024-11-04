@@ -105,4 +105,4 @@ jobs:
         env:
           VERSION: ${{ env.VERSION }}
         run: |
-          kubectl set image deploy dedsec-cl dedsec-cl=markitooo/jupiter_dedsec_cl:${{ env.VERSION }} -n dedsec-corp
+          kubectl set image deploy jupiter-dedsec-cl jupiter-dedsec-cl=markitooo/jupiter_dedsec_cl:${{ env.VERSION }} -n dedsec-corp
